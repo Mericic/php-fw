@@ -1,6 +1,6 @@
 {
   "logger": {
-    "type": "mysql",
+    "type": "file",
     "path": "../var/logs/debug.log",
     "format": "[%date%] - %url% - %message%"
   },

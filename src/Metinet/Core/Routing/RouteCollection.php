@@ -31,6 +31,7 @@ class RouteCollection
         return $this->routes;
     }
 
+    //merge les routes en paramètre avec celles de l'objet
     public function merge(RouteCollection $routes): void
     {
         foreach ($routes->all() as $route) {

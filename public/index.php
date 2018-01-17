@@ -13,6 +13,12 @@ use Metinet\Core\Config\JsonFileLoader;
 use Metinet\Core\Config\ChainLoader;
 use Metinet\Core\Controller\ControllerResolver;
 use Metinet\Core\Config\Configuration;
+use Metinet\Domain\Events\Salle;
+use Metinet\Domain\Events\Event;
+use Metinet\Domain\Events\ParticipantCollection;
+use Metinet\Domain\Student;
+use Metinet\Domain\Events\Participant;
+use Metinet\Domain\DateOfBirth;
 
 $request = Request::createFromGlobals();
 
@@ -35,5 +41,41 @@ try {
     $logger->log($e->getMessage(), ['url' => $request->getPath()]);
     $response = new Response(sprintf('<p>Error: %s</p>', $e->getMessage()), 500);
 }
+
+
+
+
+
+$Objectif = array(
+    "Objectif 1",
+    "Objectif 2",
+    "Objectif 3"
+);
+
+$Salle = new Salle(15, 3, "Salle 1", "addresse");
+
+$Etudiant1 = new Student("machin", "chose", DateOfBirth::fromString('2017-01-01'), 2016);
+$Etudiant2 = new Student("bidule", "truc", DateOfBirth::fromString('2017-01-01'), 2016);
+
+$Participant1 = new Participant('nom', 'prenom', 'test@test.com', false);
+$Participant2 = new Participant($Etudiant1->getLastName(), $Etudiant1->getFirstName(), 'test@test.fr');
+$Participant3 = new Participant($Etudiant2->getLastName(), $Etudiant2->getFirstName(), 'est@tt.fr');
+$Participant4 = new Participant('bonjour', 'monsieur', 'test@test.fr', false, true);
+$Participant5 = new Participant('bonhomme', 'enmousse', 'test@test.fr', false, true);
+
+
+$ParticipantsCollection= new ParticipantCollection(array($Participant1, $Participant2, $Participant3, $Participant4 ));
+$event = new Event('date', 'Description', $Objectif, $Salle, $ParticipantsCollection->all());
+$eventPrivate = new Event('date', 'Description', $Objectif, $Salle, $ParticipantsCollection->all(), true);
+
+$event->inscription($Participant5);
+$event->toPay('est@tt.fr');
+//$event->setPrivate();
+//$eventPrivate->inscription($Participant5);
+
+var_dump($event->getValidated());
+var_dump($eventPrivate->getValidated());
+
+//var_dump($event);
 
 $response->send();
