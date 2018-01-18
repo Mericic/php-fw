@@ -5,6 +5,13 @@
     "format": "[%date%] - %url% - %message%"
   },
   "routes": {
+    "homepage": {
+      "path": "/",
+      "methods": [
+        "GET"
+      ],
+      "action": "Metinet:Controllers:ConferencesController::viewConferences"
+    },
     "candidates": {
       "path": "/students",
       "methods": [
@@ -25,6 +32,30 @@
         "GET"
       ],
       "action": "Metinet:Controllers:CandidatesController::disBonjour"
+    },
+    "submit_conference": {
+      "path": "/conferences/submit",
+      "methods": [
+        "GET"
+      ],
+      "action": "Metinet:Controllers:ConferencesController::submitNewConference"
+    },
+    "view_conferences": {
+      "path": "/conferences",
+      "methods": [
+        "GET"
+      ],
+      "action": "Metinet:Controllers:ConferencesController::viewConferences"
+    },
+    "security_login": {
+      "path": "/login",
+      "methods": ["GET", "POST"],
+      "action": "Metinet:Controllers:SecurityController::login"
+    },
+    "security_logout": {
+      "path": "/logout",
+      "methods": ["GET"],
+      "action": "Metinet:Controllers:SecurityController::logout"
     }
   }
 }

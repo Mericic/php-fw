@@ -10,11 +10,12 @@ class Request
     private $path;
     private $method;
     private $query;
+    private $request;
     private $body;
 
     private const ALLOWED_METHODS = ['GET', 'POST', 'PUT', 'DELETE'];
 
-    public function __construct(string $path, string $method, array $headers, array $query, ?string $body = null)
+    public function __construct(string $path, string $method, array $headers, array $query, array $request, ?string $body = null)
     {
         if (!\in_array(strtoupper($method), self::ALLOWED_METHODS, true)) {
 
@@ -27,6 +28,7 @@ class Request
         $this->path = $path;
         $this->method = $method;
         $this->query = $query;
+        $this->request = $request;
         $this->body = $body;
     }
 
@@ -40,16 +42,27 @@ class Request
             }
         }
 
+        $bodyContent = file_get_contents('php://input');
+        $httpMethod = $_SERVER['REQUEST_METHOD'];
+
         parse_str($_SERVER['QUERY_STRING'] ?? '', $query);
+
+        $requestParameters = [];
+        if (0 === strpos($headers['content-type'] ?? '', 'application/x-www-form-urlencoded')
+            && \in_array(strtoupper($httpMethod), ['POST', 'PUT', 'DELETE', 'PATCH'], true)
+        ) {
+            parse_str($bodyContent, $requestParameters);
+        }
 
         $uriComponents = parse_url($_SERVER['REQUEST_URI']);
 
         $request = new self(
             $uriComponents['path'],
-            $_SERVER['REQUEST_METHOD'],
+            $httpMethod,
             $headers,
             $query,
-            file_get_contents('php://input')
+            $requestParameters,
+            $bodyContent
     );
 
         return $request;
@@ -70,9 +83,19 @@ class Request
         return $this->method;
     }
 
+    public function isPost(): bool
+    {
+        return 'POST' === strtoupper($this->method);
+    }
+
     public function getQuery(): QueryParameters
     {
         return new QueryParameters($this->query);
+    }
+
+    public function getRequest(): RequestParameters
+    {
+        return new RequestParameters($this->request);
     }
 
     public function getBody(): ?string
