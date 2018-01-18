@@ -76,10 +76,9 @@ $event->toPay('est@tt.fr');
 //$event->setPrivate();
 //$eventPrivate->inscription($Participant5);
 
-var_dump($event->getValidated());
-var_dump($eventPrivate->getValidated());
+*/
 
-//var_dump($event);*/
+
 $User1 = new User('email@email.fr', 'password1&');
 $pass = "password3&";
 $email = "email3@email.fr";
