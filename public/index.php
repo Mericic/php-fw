@@ -5,6 +5,9 @@ ini_set('display_errors', 1);
 
 require __DIR__ . '/../vendor/autoload.php';
 
+use Metinet\Core\Connexion\Connexion;
+use Metinet\Core\Connexion\User;
+use Metinet\Core\Connexion\UserCollection;
 use Metinet\Core\Http\Request;
 use Metinet\Core\Http\Response;
 use Metinet\Core\Routing\RouteUrlMatcher;
@@ -45,7 +48,7 @@ try {
 
 
 
-
+/*
 $Objectif = array(
     "Objectif 1",
     "Objectif 2",
@@ -76,6 +79,18 @@ $event->toPay('est@tt.fr');
 var_dump($event->getValidated());
 var_dump($eventPrivate->getValidated());
 
-//var_dump($event);
+//var_dump($event);*/
+$User1 = new User('email@email.fr', 'password1&');
+$pass = "password3&";
+$email = "email3@email.fr";
+$User2 = new User($email, $pass);
+
+$UserArray= array($User1, $User2);
+$UserCollection = new UserCollection($UserArray);
+$Connecteur = new Connexion($UserCollection->all());
+//$email="emailAZ@email.fr";
+$UserCollection->add($Connecteur->connectUser($email,$pass));
+
+//var_dump($UserCollection);
 
 $response->send();

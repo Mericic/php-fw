@@ -37,12 +37,7 @@ class Event
                 unset($ParticipantCollection[$key]);
             }
         }
-//        foreach ($Objectifs as $Objectif) {
-//            if (!$Objectif instanceof string) {
-//                var_dump($Objectif);
-//                throw new \LogicException('Invalid item provided, must be an instance of String');
-//            }
-//        }
+
         if (!$Salle instanceof Salle) {
 
             throw new \LogicException('Invalid item provided, must be an instance of String');
